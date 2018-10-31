@@ -1,37 +1,39 @@
 class Queue:
   def __init__(self, k):
-    self.queue = ['' for i in range(k)]
-    self.maxSize = k
-    self.head = 0
-    self.tail = 0
+        self.size = 0
+        self.max_size = k
+        self.t = [0]*k
+        self.front = self.rear = -1
 
-  def enqueue(self, data):
-    if '' not in self.queue:
-      return ("Queue Full")
-    if self.tail == self.maxSize:
-      self.tail = 0
-      self.queue[self.tail] = (data)
-    else:
-      self.queue[self.tail] = (data)
-      self.tail += 1
-    return True
+    def enQueue(self, value):
+        if self.size == self.max_size: return False
+        else:
+            if self.rear == -1:
+                self.rear = self.front = 0
+            else:
+                self.rear = (self.rear + 1)%self.max_size
+            self.t[self.rear] = value
+            self.size += 1
+            return True
 
-  def dequeue(self):
-    if self.size() <= 0:
-      self.resetQueue()
-      return ("Queue Empty")
-    data = self.queue[self.head]
-    self.queue[self.head] = ''
-    if self.head == self.maxSize:
-      self.head = 0
-    else:
-      self.head += 1
-    return data
+    def deQueue(self):
+        if self.size == 0: return False
+        if self.front == self.rear:
+            self.front = self.rear = -1
+        else:
+            self.front = (self.front + 1)%self.max_size
+        self.size -= 1
+        return True
 
-  def size(self):
-    return self.tail - self.head
 
-  def resetQueue(self):
-    self.tail = 0
-    self.head = 0
-    self.queue = ['' for i in range(self.maxSize)]
+    def Front(self):
+        return self.t[self.front] if self.size != 0 else -1
+
+    def Rear(self):
+        return self.t[self.rear] if self.size != 0 else -1
+
+    def isEmpty(self):
+        return self.size == 0
+
+    def isFull(self):
+        return self.size == self.max_size
